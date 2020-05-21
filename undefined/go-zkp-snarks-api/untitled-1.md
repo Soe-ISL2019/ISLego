@@ -257,11 +257,86 @@ func (g1 G1) Double(p [3]*big.Int) [3]*big.Int { //point Doubling (4M + 6S or 4M
 
 ## MulScalar\(p \[3\]\*bih.Int, e \*big.Int\) \[3\]\*big.Int
 
-> 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다. 타원 곡선위 곱연산은 다음과 같은 구조를 갖는다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication\#Double-and-add](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
+> 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다.  
+> d\(정수\)\*P\(점\)와 같은 타원 곡선위 곱연산은 다음과 같이 이진수의 표현으로부터 시작된다.  
+>  [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication\#Double-and-add](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
 
 $$
 d = d_0+2d_1+2^2d_2+...+2^md_m
 $$
 
-> 코드에서 d는 결과 값인 점 q이고, dn은 e의 n번째 비트열의 값이다. 여기서 2^n으로 계속하여 제곱되는 정수는
+> 코드에서 d는 결과 값인 점 q이고, dn은 e의 n번째 비트열의 값이다. 여기서 2^n으로 계속하여 제곱되는 2라는 정수대신 P^n의 연산으로 바뀌어, 타원 곡선에서의 d\*P의 연산이 성립하게 된다. 코드는 아래와 같다.
+
+```go
+func (g1 G1) MulScalar(p [3]*big.Int, e *big.Int) [3]*big.Int { //스칼라 곱, 점P와 정수 e간의 곱셈 연산 함
+	// https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
+	// for more possible implementations see g2.go file, at the function g2.MulScalar()
+
+	q := [3]*big.Int{g1.F.Zero(), g1.F.Zero(), g1.F.Zero()} //{0,0,0}
+	d := g1.F.Copy(e)                                       // 복사
+	/*
+		func (fq Fq) Copy(a *big.Int) *big.Int {
+			return new(big.Int).SetBytes(a.Bytes())
+		}*/
+	r := p                                 //점 p
+	for i := d.BitLen() - 1; i >= 0; i-- { //d의 절대값의 비트 길이 d가 표현되는 비트의 길이 만큼 반복
+		q = g1.Double(q)   //배 연산
+		if d.Bit(i) == 1 { //해당 비트가 만약 1이면
+			q = g1.Add(q, r) //점p와 점q를 더함
+		}
+	}
+
+	return q
+}
+```
+
+## Affine\(p \[3\]_big.Int\) \[2\]_big.Int
+
+> 3차원 공간의 점을 아핀 공간이라는 2차원 공간의 점으로 변환함
+
+```go
+func (g1 G1) Affine(p [3]*big.Int) [2]*big.Int { //아핀 공간, 아핀 평명내의 점으로 변환함
+	if g1.IsZero(p) { //z축 좌표가 0일때
+		return g1.Zero() //(0,0) 반환
+	}
+
+	zinv := g1.F.Inverse(p[2]) //곱셈의 역원을 구함
+	zinv2 := g1.F.Square(zinv) //zinv^2
+	x := g1.F.Mul(p[0], zinv2) //y=x1*zinv^2
+
+	zinv3 := g1.F.Mul(zinv2, zinv) //zinv^3
+	y := g1.F.Mul(p[1], zinv3)     //y=y1*zinv^3
+
+	return [2]*big.Int{x, y} //(x,y) 반환
+}
+```
+
+## Equal\(p1, p2 \[3\]\*big.Int\) bool
+
+> 두 점이 타원곡선 상에서 같은 점인지 확인하는 메소
+
+```go
+func (g1 G1) Equal(p1, p2 [3]*big.Int) bool { //두 점이
+	if g1.IsZero(p1) { //점1의 z축의 값이 0이면
+		return g1.IsZero(p2) //점2의 z값이 0인지 반환
+	}
+	if g1.IsZero(p2) { //점2의 z값이 0이면
+		return g1.IsZero(p1) //점1의 z값이 0인지 반환
+	}
+
+	z1z1 := g1.F.Square(p1[2]) //Z1^2
+	z2z2 := g1.F.Square(p2[2]) //Z2^2
+
+	u1 := g1.F.Mul(p1[0], z2z2) //U1=X1*Z2^2
+	u2 := g1.F.Mul(p2[0], z1z1) //U2=X2*Z1^2
+
+	z1cub := g1.F.Mul(p1[2], z1z1) //Z1^3
+	z2cub := g1.F.Mul(p2[2], z2z2) //Z2^3
+
+	s1 := g1.F.Mul(p1[1], z2cub) //S1=Y1*Z2^3
+	s2 := g1.F.Mul(p2[1], z1cub) //S2=Y2*Z1^3
+
+	return g1.F.Equal(u1, u2) && g1.F.Equal(s1, s2) //U1과 U2, S1과 S2가 모두 같은지 확인
+}
+```
 
