@@ -1132,12 +1132,6 @@ func (pf PolynomialField) DivisorPolynomial(px, z []*big.Int) []*big.Int {
 
 ## \[bn128, circuitcompiler - D. H. GWAK, H. J. SONG, N. J. LEE\]
 
-### circuitcompiler\circuit.go - N. J. LEE
-
-```go
-
-```
-
 {% page-ref page="untitled-1.md" %}
 
 
