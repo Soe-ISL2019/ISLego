@@ -490,6 +490,8 @@ func (pf PolynomialField) DivisorPolynomial(px, z []*big.Int) []*big.Int {
 {% endtab %}
 {% endtabs %}
 
+{% page-ref page="r1csqap-r1csqap.go.md" %}
+
 ### groth16.go
 
 {% tabs %}
@@ -1133,6 +1135,8 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 ```
 {% endtab %}
 {% endtabs %}
+
+{% page-ref page="groth16-groth16.go.md" %}
 
 ## \[bn128, circuitcompiler - D. H. GWAK, H. J. SONG, N. J. LEE\]
 
