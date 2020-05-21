@@ -1088,7 +1088,7 @@ func GenerateProofs(circuit circuitcompiler.Circuit, pk Pk, w []*big.Int, px []*
 	deltaSG2 := Utils.Bn.G2.MulScalar(pk.G2.Delta, s)
 	proof.PiB = Utils.Bn.G2.Add(proof.PiB, deltaSG2)
 
-	hx := Utils.PF.DivisorPolynomial(px, pk.Z) // maybe move this calculation to a previous step
+	hx := Utils.PF.DivisorPolynomial(px, pk.Z) // 이 계산을 이전 단계로 옮길 수도 있음
 
 	// piC = (Σ from l+1 to m (w[i] * (pk.g1.Beta + pk.g1.Alpha + pk.C)) + h(tau)) / δ) + piA*s + r*piB - r*s*δ
 	for i := 0; i < len(hx); i++ {
