@@ -290,9 +290,10 @@ func (g1 G1) MulScalar(p [3]*big.Int, e *big.Int) [3]*big.Int { //스칼라 곱,
 }
 ```
 
-## Affine\(p \[3\]_big.Int\) \[2\]_big.Int
+## Affine\(p \[3\]big.Int\) \[2\]big.Int
 
-> 3차원 공간의 점을 아핀 공간이라는 2차원 공간의 점으로 변환함
+> 3차원 공간의 점을 아핀 공간이라는 2차원 공간의 점으로 변환  
+> [https://ko.wikipedia.org/wiki/%EC%95%84%ED%95%80\_%EA%B3%B5%EA%B0%84](https://ko.wikipedia.org/wiki/%EC%95%84%ED%95%80_%EA%B3%B5%EA%B0%84)
 
 ```go
 func (g1 G1) Affine(p [3]*big.Int) [2]*big.Int { //아핀 공간, 아핀 평명내의 점으로 변환함
