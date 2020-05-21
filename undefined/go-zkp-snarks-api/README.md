@@ -888,9 +888,11 @@ type utils struct {
 
 {% tab title="func" %}
 ```
-// Utils is the data structure holding the BN128, FqR Finite Field over R, PolynomialField, that will be used inside the snarks operations
+// Utils 변수는 snarks 연산 내에서 사용될 
+// BN128, FqR Finite Field over R, PolynomialField를 보유하는 데이터 구조 
 var Utils = prepareUtils()
 
+// prepareUtils 함수는 
 func prepareUtils() utils {
 	bn, err := bn128.NewBn128()
 	if err != nil {
@@ -910,7 +912,8 @@ func prepareUtils() utils {
 ```
 
 ```text
-// GenerateTrustedSetup generates the Trusted Setup from a compiled Circuit. The Setup.Toxic sub data structure must be destroyed
+// GenerateTrustedSetup 함수는 컴파일된 Circuit에서 신뢰할 수 있는 Setup을 생성 
+// Setup.Toxic 하위 데이터 구조를 삭제해야 함
 func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, alphas, betas, gammas [][]*big.Int) (Setup, error) {
 	var setup Setup
 	var err error
