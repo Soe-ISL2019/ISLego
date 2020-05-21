@@ -4,7 +4,8 @@
 
 ## Analysis of Go-Snarks Library <a id="undefined"></a>
 
-* [\[2020.05.21.Thurs\]](undefined/go-zkp-snarks-api.md)
+* [\[2020.05.21.Thurs\]](undefined/go-zkp-snarks-api/README.md)
+  * [bn128/g1.go 분석](undefined/go-zkp-snarks-api/untitled-1.md)
 
 ## Development of Go-Snarks <a id="undefined-1"></a>
 
