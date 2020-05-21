@@ -21,7 +21,7 @@ import (
 >
 > big.Int 구조체는 매우 큰 정수 연산을 위해 존재하는 패키지이다. 때문에 간단한 사칙연산 부터 모든 연산들이 메소드로 구현되어 있다. [https://golang.org/pkg/math/big/\#Int](https://golang.org/pkg/math/big/#Int)
 >
-> 결과적으로 G1은 타원곡선 알고리즘을 구현하고 있다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication\#Double-and-add](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
+> 결과적으로 G1은 타원곡선 알고리즘을 구현하고 있다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
 
 ```go
 
@@ -257,7 +257,11 @@ func (g1 G1) Double(p [3]*big.Int) [3]*big.Int { //point Doubling (4M + 6S or 4M
 
 ## MulScalar\(p \[3\]\*bih.Int, e \*big.Int\) \[3\]\*big.Int
 
-> 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다. 타원 곡선위 곱연산은 다음과 같은 구조를
+> 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다. 타원 곡선위 곱연산은 다음과 같은 구조를 갖는다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication\#Double-and-add](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
 
+$$
+d = d_0+2d_1+2^2d_2+...+2^md_m
+$$
 
+> 코드에서 d는 결과 값인 점 q이고, dn은 e의 n번째 비트열의 값이다. 여기서 2^n으로 계속하여 제곱되는 정수는
 
