@@ -884,7 +884,7 @@ import (
 
 {% tab title="struct" %}
 ```
-// 다항식 필드는 다항식 연산이 수행되는 유한 필드 위의 다항식
+// 다항식 필드는 다항식 연산이 수행되는 유한 위의 다항식
 type PolynomialField struct {
 	F fields.Fq
 }
@@ -908,7 +908,7 @@ func Transpose(matrix [][]*big.Int) [][]*big.Int {
 ```
 
 ```text
-// ArrayOfBigZeros 함는 n 개의 요소가 0 인 * big.Int 배열을 생
+// ArrayOfBigZeros 함는 n 개의 요소가 0 인 *big.Int 배열을 생
 func ArrayOfBigZeros(num int) []*big.Int {
 	bigZero := big.NewInt(int64(0))
 	var r []*big.Int
@@ -920,7 +920,7 @@ func ArrayOfBigZeros(num int) []*big.Int {
 ```
 
 ```text
-// BigArraysEqual 함수는 BigArrays 비교
+// BigArraysEqual 함수는 2 개의 *big.Int 배열 길이 비교 후 같을 경우 값이 일치한지 비
 func BigArraysEqual(a, b []*big.Int) bool {
 	if len(a) != len(b) {
 		return false
@@ -935,7 +935,7 @@ func BigArraysEqual(a, b []*big.Int) bool {
 ```
 
 ```text
-// NewPolynomialField creates a new PolynomialField with the given FiniteField
+// NewPolynomialField 함수는 주어진 유한로 새로운 다항식 필드를 생성
 func NewPolynomialField(f fields.Fq) PolynomialField {
 	return PolynomialField{
 		f,
@@ -944,7 +944,7 @@ func NewPolynomialField(f fields.Fq) PolynomialField {
 ```
 
 ```text
-// Mul multiplies two polinomials over the Finite Field
+// Mul 함수는 유한에서 두 개의 다항식을 곱셈 연산
 func (pf PolynomialField) Mul(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(len(a) + len(b) - 1)
 	for i := 0; i < len(a); i++ {
@@ -959,7 +959,7 @@ func (pf PolynomialField) Mul(a, b []*big.Int) []*big.Int {
 ```
 
 ```text
-// Div divides two polinomials over the Finite Field, returning the result and the remainder
+// Div 함수는 유한체에서 두 개의 다항식을 나누고 결과와 나머지를 반환
 func (pf PolynomialField) Div(a, b []*big.Int) ([]*big.Int, []*big.Int) {
 	// https://en.wikipedia.org/wiki/Division_algorithm
 	r := ArrayOfBigZeros(len(a) - len(b) + 1)
@@ -978,6 +978,7 @@ func (pf PolynomialField) Div(a, b []*big.Int) ([]*big.Int, []*big.Int) {
 ```
 
 ```text
+// max 함수는 정수형 a, b 인자를 비교하여 큰 값을 반
 func max(a, b int) int {
 	if a > b {
 		return a
@@ -987,7 +988,7 @@ func max(a, b int) int {
 ```
 
 ```text
-// Add adds two polinomials over the Finite Field
+// Add 함수는 유한체 위에 두 개의 다항식을 덧셈 연
 func (pf PolynomialField) Add(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(max(len(a), len(b)))
 	for i := 0; i < len(a); i++ {
@@ -1001,7 +1002,7 @@ func (pf PolynomialField) Add(a, b []*big.Int) []*big.Int {
 ```
 
 ```text
-// Sub subtracts two polinomials over the Finite Field
+// Sub 유한체에서 두 개의 다항식을 뺄셈 연
 func (pf PolynomialField) Sub(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(max(len(a), len(b)))
 	for i := 0; i < len(a); i++ {
@@ -1015,7 +1016,7 @@ func (pf PolynomialField) Sub(a, b []*big.Int) []*big.Int {
 ```
 
 ```text
-// Eval evaluates the polinomial over the Finite Field at the given value x
+// Eval 주어진 값 x에서 유한체에서의 다항식을 평가
 func (pf PolynomialField) Eval(v []*big.Int, x *big.Int) *big.Int {
 	r := big.NewInt(int64(0))
 	for i := 0; i < len(v); i++ {
