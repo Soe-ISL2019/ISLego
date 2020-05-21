@@ -4,6 +4,8 @@
 
 ## \[Groth16, r1csqap - T. H. KIM\]
 
+### r1csqap.go
+
 ### groth16.go
 
 {% tabs %}
@@ -356,7 +358,7 @@ type Pk struct { // Proving Key
 	}
 	PowersTauDelta [][3]*big.Int // powers of τ encrypted in G1 curve, divided by δ
 }
-type Vk struct {
+type Vk struct { // Verification Key
 	IC [][3]*big.Int
 	G1 struct {
 		Alpha [3]*big.Int
@@ -644,8 +646,6 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 {% endtab %}
 {% endtabs %}
 
-### r1csqap.go
-
 {% tabs %}
 {% tab title="r1csqap.go" %}
 ```text
@@ -893,7 +893,7 @@ type PolynomialField struct {
 
 {% tab title="func" %}
 ```
-// Transpose 함수는 * big.Int 행렬을 전치
+// Transpose 함수는 *big.Int 행렬을 전치
 func Transpose(matrix [][]*big.Int) [][]*big.Int {
 	var r [][]*big.Int
 	for i := 0; i < len(matrix[0]); i++ {
@@ -908,7 +908,7 @@ func Transpose(matrix [][]*big.Int) [][]*big.Int {
 ```
 
 ```text
-// ArrayOfBigZeros 함는 n 개의 요소가 0 인 *big.Int 배열을 생
+// ArrayOfBigZeros 함는 n 개의 요소가 0 인 *big.Int 배열을 생성
 func ArrayOfBigZeros(num int) []*big.Int {
 	bigZero := big.NewInt(int64(0))
 	var r []*big.Int
@@ -935,7 +935,7 @@ func BigArraysEqual(a, b []*big.Int) bool {
 ```
 
 ```text
-// NewPolynomialField 함수는 주어진 유한로 새로운 다항식 필드를 생성
+// NewPolynomialField 함수는 주어진 유한체로 새로운 다항식 필드를 생성
 func NewPolynomialField(f fields.Fq) PolynomialField {
 	return PolynomialField{
 		f,
@@ -944,7 +944,7 @@ func NewPolynomialField(f fields.Fq) PolynomialField {
 ```
 
 ```text
-// Mul 함수는 유한에서 두 개의 다항식을 곱셈 연산
+// Mul 함수는 유한체에서 두 개의 다항식을 곱셈 연산
 func (pf PolynomialField) Mul(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(len(a) + len(b) - 1)
 	for i := 0; i < len(a); i++ {
@@ -978,7 +978,7 @@ func (pf PolynomialField) Div(a, b []*big.Int) ([]*big.Int, []*big.Int) {
 ```
 
 ```text
-// max 함수는 정수형 a, b 인자를 비교하여 큰 값을 반
+// max 함수는 정수형 a, b 인자를 비교하여 큰 값을 반환
 func max(a, b int) int {
 	if a > b {
 		return a
@@ -988,7 +988,7 @@ func max(a, b int) int {
 ```
 
 ```text
-// Add 함수는 유한체 위에 두 개의 다항식을 덧셈 연
+// Add 함수는 유한체 위에 두 개의 다항식을 덧셈 연산
 func (pf PolynomialField) Add(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(max(len(a), len(b)))
 	for i := 0; i < len(a); i++ {
@@ -1002,7 +1002,7 @@ func (pf PolynomialField) Add(a, b []*big.Int) []*big.Int {
 ```
 
 ```text
-// Sub 유한체에서 두 개의 다항식을 뺄셈 연
+// Sub 유한체에서 두 개의 다항식을 뺄셈 연산 
 func (pf PolynomialField) Sub(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(max(len(a), len(b)))
 	for i := 0; i < len(a); i++ {
