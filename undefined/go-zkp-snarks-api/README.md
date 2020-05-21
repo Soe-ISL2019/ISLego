@@ -341,7 +341,7 @@ import (
 {% tab title="Struct" %}
 ```
 type Pk struct { // Proving Key
-	BACDelta [][3]*big.Int // {( βui(x)+αvi(x)+wi(x) ) / δ } from l+1 to m
+	BACDelta [][3]*big.Int //  l+1 {( βui(x)+αvi(x)+wi(x) ) / δ } 
 	Z        []*big.Int
 	G1       struct {
 		Alpha    [3]*big.Int
@@ -372,7 +372,8 @@ type Vk struct { // Verification Key
 ```
 
 ```text
-// Setup is the data structure holding the Trusted Setup data. The Setup.Toxic sub struct must be destroyed after the GenerateTrustedSetup function is completed
+// Setup 구조체는 신뢰할 수있는 설정 데이터를 보유하는 데이터 구조 
+// GenerateTrustedSetup 함수가 완료된 후 Setup.Toxic 하위 구조체를 삭제해야 
 type Setup struct {
 	Toxic struct {
 		T      *big.Int // trusted setup secret
@@ -387,7 +388,7 @@ type Setup struct {
 	Vk Vk
 }
 
-// Proof contains the parameters to proof the zkSNARK
+// Proof 구조체는 zk-SNARK를 증명하는 매개 변수를 포함
 type Proof struct {
 	PiA [3]*big.Int
 	PiB [3][2]*big.Int
