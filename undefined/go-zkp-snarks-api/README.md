@@ -957,8 +957,8 @@ func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, al
 	invDelta := Utils.FqR.Inverse(setup.Toxic.Kdelta)
 	ztinvDelta := Utils.FqR.Mul(invDelta, zt)
 
-	// encrypt t values with curve generators
-	// powers of tau divided by delta
+	// curve generators를 이용하여 t 암호화
+	// delta로 나눈 tau의 거듭 제곱 
 	var ptd [][3]*big.Int
 	ini := Utils.Bn.G1.MulScalar(Utils.Bn.G1.G, ztinvDelta)
 	ptd = append(ptd, ini)
@@ -967,7 +967,7 @@ func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, al
 		ptd = append(ptd, Utils.Bn.G1.MulScalar(Utils.Bn.G1.G, Utils.FqR.Mul(tEncr, ztinvDelta)))
 		tEncr = Utils.FqR.Mul(tEncr, setup.Toxic.T)
 	}
-	// powers of τ encrypted in G1 curve, divided by δ
+	// G1 곡선으로 암호화된 τ의 거듭제곱을 δ로 나눈 값
 	// (G1 * τ) / δ
 	setup.Pk.PowersTauDelta = ptd
 
