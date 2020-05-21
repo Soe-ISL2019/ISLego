@@ -17,7 +17,9 @@ import (
 
 ## G1 구조체 
 
-> fields.Fq 구조체는
+> fields.Fq 구조체는 유한체\(mod Q상의\)를 구현한 구조체 패키지이다. 때문에 해당 패키지의 모든 연산은 mod Q 상에서 이루어진다. [https://github.com/arnaucube/go-snark/blob/master/fields/fq.go](https://github.com/arnaucube/go-snark/blob/master/fields/fq.go)
+>
+> big.Int 구조체는 매우 큰 정수 연산을 위해 존재하는 패키지이다. 때문에 간단한 사칙연산 부터 모든 연산들이 메소드로 구현되어 있다. [https://golang.org/pkg/math/big/\#Int](https://golang.org/pkg/math/big/#Int)
 
 ```go
 
@@ -28,7 +30,7 @@ type G1 struct { //G1 구조체 역할은 단지 관련 메소드를 사용하�
 }
 ```
 
-### 구조체 내 메소드 
+### G1 구조체 내 메소드 
 
 * NewG1\(f fields.Fq, g \[2\]\*big.Int\) G1
 * Zero\(\) \[2\]\*big.Int
@@ -255,7 +257,7 @@ func (g1 G1) Double(p [3]*big.Int) [3]*big.Int { //point Doubling (4M + 6S or 4M
 
 > 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다.
 >
-> 타원 곡선위 곱연산은 다음과 rㅏㅌ은
+> 타원 곡선위 곱연산은 다음과 같은 구조를
 
 
 
