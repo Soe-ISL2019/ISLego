@@ -884,7 +884,7 @@ import (
 
 {% tab title="struct" %}
 ```
-// PolynomialField is the Polynomial over a Finite Field where the polynomial operations are performed
+// 다항식 필드는 다항식 연산이 수행되는 유한 필드 위의 다항식
 type PolynomialField struct {
 	F fields.Fq
 }
@@ -893,7 +893,7 @@ type PolynomialField struct {
 
 {% tab title="func" %}
 ```
-// Transpose transposes the *big.Int matrix
+// Transpose 함수는 * big.Int 행렬을 전치
 func Transpose(matrix [][]*big.Int) [][]*big.Int {
 	var r [][]*big.Int
 	for i := 0; i < len(matrix[0]); i++ {
@@ -908,7 +908,7 @@ func Transpose(matrix [][]*big.Int) [][]*big.Int {
 ```
 
 ```text
-// ArrayOfBigZeros creates a *big.Int array with n elements to zero
+// ArrayOfBigZeros 함는 n 개의 요소가 0 인 * big.Int 배열을 생
 func ArrayOfBigZeros(num int) []*big.Int {
 	bigZero := big.NewInt(int64(0))
 	var r []*big.Int
@@ -920,6 +920,7 @@ func ArrayOfBigZeros(num int) []*big.Int {
 ```
 
 ```text
+// BigArraysEqual 함수는 BigArrays 비교
 func BigArraysEqual(a, b []*big.Int) bool {
 	if len(a) != len(b) {
 		return false
