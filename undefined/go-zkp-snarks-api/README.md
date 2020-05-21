@@ -1002,7 +1002,7 @@ func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, al
 		setup.Pk.BACDelta = append(setup.Pk.BACDelta, zero3)
 	}
 	for i := circuit.NPublic + 1; i < circuit.NVars; i++ {
-		// TODO calculate all at, bt, ct outside, to avoid repeating calculations
+		// TODO는 반복 계산을 피하기 위해 모든 at, bt, ct 외부를 계산
 		at := Utils.PF.Eval(alphas[i], setup.Toxic.T)
 		bt := Utils.PF.Eval(betas[i], setup.Toxic.T)
 		ct := Utils.PF.Eval(gammas[i], setup.Toxic.T)
@@ -1046,7 +1046,7 @@ func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, al
 ```
 
 ```text
-// GenerateProofs generates all the parameters to proof the zkSNARK from the Circuit, Setup and the Witness
+// GenerateProofs 함수는 Circuit, Setup 및 Witness에서 zkSNARK를 증명하기 위해 모든 매개 변수를 생성
 func GenerateProofs(circuit circuitcompiler.Circuit, pk Pk, w []*big.Int, px []*big.Int) (Proof, error) {
 	var proof Proof
 	proof.PiA = [3]*big.Int{Utils.Bn.G1.F.Zero(), Utils.Bn.G1.F.Zero(), Utils.Bn.G1.F.Zero()}
@@ -1062,7 +1062,7 @@ func GenerateProofs(circuit circuitcompiler.Circuit, pk Pk, w []*big.Int, px []*
 		return Proof{}, err
 	}
 
-	// piBG1 will hold all the same than proof.PiB but in G1 curve
+	// piBG1은 proof.PiB와 동일하지만 G1 곡선으로 유지
 	piBG1 := [3]*big.Int{Utils.Bn.G1.F.Zero(), Utils.Bn.G1.F.Zero(), Utils.Bn.G1.F.Zero()}
 
 	for i := 0; i < circuit.NVars; i++ {
