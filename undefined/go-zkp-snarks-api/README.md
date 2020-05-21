@@ -1029,7 +1029,7 @@ func (pf PolynomialField) Eval(v []*big.Int, x *big.Int) *big.Int {
 ```
 
 ```text
-// NewPolZeroAt generates a new polynomial that has value zero at the given value
+// NewPolZeroAt 함수는 주어진 값에서 값이 0 인 새로운 다항식을 생성
 func (pf PolynomialField) NewPolZeroAt(pointPos, totalPoints int, height *big.Int) []*big.Int {
 	fac := 1
 	for i := 1; i < totalPoints+1; i++ {
@@ -1052,7 +1052,7 @@ func (pf PolynomialField) NewPolZeroAt(pointPos, totalPoints int, height *big.In
 ```
 
 ```text
-// LagrangeInterpolation performs the Lagrange Interpolation / Lagrange Polynomials operation
+// LagrangeInterpolation 함수는 라그랑주 보간법/ 라그랑주 다항식 연산을 수행
 func (pf PolynomialField) LagrangeInterpolation(v []*big.Int) []*big.Int {
 	// https://en.wikipedia.org/wiki/Lagrange_polynomial
 	var r []*big.Int
@@ -1065,7 +1065,7 @@ func (pf PolynomialField) LagrangeInterpolation(v []*big.Int) []*big.Int {
 ```
 
 ```text
-// R1CSToQAP converts the R1CS values to the QAP values
+// R1CSToQAP 함수는 R1CS 값을 QAP 값으로 변환
 func (pf PolynomialField) R1CSToQAP(a, b, c [][]*big.Int) ([][]*big.Int, [][]*big.Int, [][]*big.Int, []*big.Int) {
 	aT := Transpose(a)
 	bT := Transpose(b)
@@ -1097,7 +1097,7 @@ func (pf PolynomialField) R1CSToQAP(a, b, c [][]*big.Int) ([][]*big.Int, [][]*bi
 ```
 
 ```text
-// CombinePolynomials combine the given polynomials arrays into one, also returns the P(x)
+// CombinePolynomials 함수는 주어진 다항식 배열을 하나로 결합하고, P(x)를 반환
 func (pf PolynomialField) CombinePolynomials(r []*big.Int, ap, bp, cp [][]*big.Int) ([]*big.Int, []*big.Int, []*big.Int, []*big.Int) {
 	var ax []*big.Int
 	for i := 0; i < len(r); i++ {
@@ -1121,7 +1121,7 @@ func (pf PolynomialField) CombinePolynomials(r []*big.Int, ap, bp, cp [][]*big.I
 ```
 
 ```text
-// DivisorPolynomial returns the divisor polynomial given two polynomials
+// DivisorPolynomial 함수는 2 개의 다항식이 주어지면 나눗셈(제수) 다항식을 반환
 func (pf PolynomialField) DivisorPolynomial(px, z []*big.Int) []*big.Int {
 	quo, _ := pf.Div(px, z)
 	return quo
