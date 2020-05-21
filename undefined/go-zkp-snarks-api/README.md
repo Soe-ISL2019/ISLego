@@ -825,7 +825,7 @@ import (
 {% tab title="Struct" %}
 ```
 type Pk struct { // Proving Key
-	BACDelta [][3]*big.Int //  l+1 {( βui(x)+αvi(x)+wi(x) ) / δ } 
+	BACDelta [][3]*big.Int //  l+1 {( 
 	Z        []*big.Int
 	G1       struct {
 		Alpha    [3]*big.Int
