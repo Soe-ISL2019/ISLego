@@ -825,28 +825,34 @@ import (
 {% tab title="Struct" %}
 ```
 type Pk struct { // Proving Key
-	BACDelta [][3]*big.Int //  l+1 {( 
+	BACDelta [][3]*big.Int // l+1 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / δ } 
 	Z        []*big.Int
 	G1       struct {
 		Alpha    [3]*big.Int
 		Beta     [3]*big.Int
 		Delta    [3]*big.Int
-		At       [][3]*big.Int // {a(τ)} from 0 to m
-		BACGamma [][3]*big.Int // {( βui(x)+αvi(x)+wi(x) ) / γ } from 0 to m
+		At       [][3]*big.Int // 0 에서 m 까지 {a(τ)} 
+		BACGamma [][3]*big.Int // 0 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / γ } 
 	}
 	G2 struct {
 		Beta     [3][2]*big.Int
 		Gamma    [3][2]*big.Int
 		Delta    [3][2]*big.Int
-		BACGamma [][3][2]*big.Int // {( βui(x)+αvi(x)+wi(x) ) / γ } from 0 to m
+		BACGamma [][3][2]*big.Int // 0 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / γ } 
 	}
-	PowersTauDelta [][3]*big.Int // powers of τ encrypted in G1 curve, divided by δ
+	PowersTauDelta [][3]*big.Int // G1 곡선으로 암호화 된 τ의 powers를 δ로 나눈 값
 }
-type Vk struct { // Verification Key
+type Vk struct { // Verificaion Key
 	IC [][3]*big.Int
 	G1 struct {
 		Alpha [3]*big.Int
-
+	}
+	G2 struct {
+		Beta  [3][2]*big.Int
+		Gamma [3][2]*big.Int
+		Delta [3][2]*big.Int
+	}
+}
 ```
 
 ```text
