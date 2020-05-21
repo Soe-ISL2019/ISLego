@@ -846,13 +846,7 @@ type Vk struct { // Verification Key
 	IC [][3]*big.Int
 	G1 struct {
 		Alpha [3]*big.Int
-	}
-	G2 struct {
-		Beta  [3][2]*big.Int
-		Gamma [3][2]*big.Int
-		Delta [3][2]*big.Int
-	}
-}
+
 ```
 
 ```text
