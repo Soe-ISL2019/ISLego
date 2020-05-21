@@ -373,7 +373,7 @@ type Vk struct { // Verification Key
 
 ```text
 // Setup 구조체는 신뢰할 수있는 설정 데이터를 보유하는 데이터 구조 
-// GenerateTrustedSetup 함수가 완료된 후 Setup.Toxic 하위 구조체를 삭제해야 
+// GenerateTrustedSetup 함수가 완료된 후 Setup.Toxic 하위 구조체를 삭제해야 함 
 type Setup struct {
 	Toxic struct {
 		T      *big.Int // trusted setup secret
