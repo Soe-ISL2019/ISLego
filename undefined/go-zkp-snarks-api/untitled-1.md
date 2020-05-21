@@ -257,10 +257,6 @@ func (g1 G1) Double(p [3]*big.Int) [3]*big.Int { //point Doubling (4M + 6S or 4M
 
 ## MulScalar\(p \[3\]\*bih.Int, e \*big.Int\) \[3\]\*big.Int
 
-> 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다.
->
-> 타원 곡선위 곱연산은 다음과 같다.
-
 > 매개변수 e의 비트열을 갖고, 타원 곡선 위의 점간 곱셈연산을 해준다. 타원 곡선위 곱연산은 다음과 같은 구조를
 
 
