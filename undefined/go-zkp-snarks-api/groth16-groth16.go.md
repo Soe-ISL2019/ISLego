@@ -421,7 +421,7 @@ func prepareUtils() utils {
 }
 ```
 
-```text
+```go
 // GenerateTrustedSetup 함수는 컴파일된 Circuit에서 신뢰할 수 있는 Setup을 생성 
 // Setup.Toxic 하위 데이터 구조를 삭제해야 함
 func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, alphas, betas, gammas [][]*big.Int) (Setup, error) {
