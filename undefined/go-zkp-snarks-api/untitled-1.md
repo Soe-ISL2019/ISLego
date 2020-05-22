@@ -4,16 +4,243 @@ description: >-
   구조체라고 생각됨
 ---
 
-# bn128/g1.go Analysis
+# bn128/g1.go
 
-## 포함 패키지 
+## source code
 
+{% tabs %}
+{% tab title="Import" %}
 ```go
+package bn128
+
 import (
 	"math/big" //큰수 계산(또는 부동 소수 점수, 유리수의 정밀도 산수)을 위한 패키지
 	"github.com/arnaucube/go-snark/fields" //실제 go snark git에 존재하는 패키지 => 체(Field)를 구현하고 있음
 )
 ```
+{% endtab %}
+
+{% tab title="Struct" %}
+```go
+type G1 struct { //G1 구조체 역할은 단지 관련 메소드를 사용하기 위함
+	F fields.Fq   //go-snark/fields/Fq 구조체1
+	G [3]*big.Int // 큰 Int 배열, G의
+}
+```
+{% endtab %}
+
+{% tab title="Function" %}
+```go
+func NewG1(f fields.Fq, g [2]*big.Int) G1 {
+	var g1 G1
+	g1.F = f
+	g1.G = [3]*big.Int{ //큰 int 포인터 배열 3개 할당
+		g[0], // 매개변수 배열 g
+		g[1],
+		g1.F.One(), //field.Fq 구조체의 One()함수 호출 => 1로 선언된 int 생성
+		/* field.Fq.One() 함수
+		func (fq Fq) One() *big.Int {
+			return big.NewInt(int64(1)) // 1로 선언된 int 생성
+		}*/
+	}
+	return g1
+}
+```
+{% endtab %}
+
+{% tab title="Method" %}
+```go
+func (g1 G1) Zero() [2]*big.Int {
+	return [2]*big.Int{g1.F.Zero(), g1.F.Zero()} //g1.F는 field.Fq 구조체, .Zero() 매소드는 .One()과 같으며, 0으로 선언된 int 생성해줌
+	/* field.Fq.Zero() 함수
+	func (fq Fq) Zero() *big.Int {
+		return big.NewInt(int64(0)) // 1로 선언된 int 생성
+	}*/
+}
+func (g1 G1) IsZero(p [3]*big.Int) bool {
+	return g1.F.IsZero(p[2]) //p[2]가 0인지 확인, 여기서 p[2]는 z좌표, G1구조체에서는 NewOne()으로 초기화 해줬음
+}
+
+func (g1 G1) Add(p1, p2 [3]*big.Int) [3]*big.Int { // point Addition (12M + 4S)
+
+	// https://en.wikibooks.org/wiki/Cryptography/Prime_Curve/Jacobian_Coordinates
+	// https://github.com/zcash/zcash/blob/master/src/snark/libsnark/algebra/curves/alt_bn128/alt_bn128_g1.cpp#L208
+	// http://hyperelliptic.org/EFD/g1p/auto-code/shortw/jacobian-0/addition/add-2007-bl.op3
+
+	if g1.IsZero(p1) { //p1[2]가 0인지 확인
+		return p2
+	}
+	if g1.IsZero(p2) { //p2[2]가 0인지 확인
+		return p1
+	}
+
+	// p1, p2 배열은 점의 좌표를 나타냄
+	x1 := p1[0] //
+	y1 := p1[1] //
+	z1 := p1[2] //
+	x2 := p2[0] //
+	y2 := p2[1] //
+	z2 := p2[2] //
+
+	z1z1 := g1.F.Square(z1) //g1.F => field.Fq 구조체, Fq.Square() 메소드 호출 Z1Z1 = Z1^2
+	z2z2 := g1.F.Square(z2) //말 그대로 제곱 연산 Z2Z2 = Z2^2
+	/*
+		func (fq Fq) Square(a *big.Int) *big.Int {
+			m := new(big.Int).Mul(a, a)	//a*a연산
+			return new(big.Int).Mod(m, fq.Q)
+		}*/
+
+	u1 := g1.F.Mul(x1, z2z2) //U1 = X1*Z2Z2
+	u2 := g1.F.Mul(x2, z1z1) //U2 = X2*Z1Z1
+	/*
+		func (fq Fq) Mul(a, b *big.Int) *big.Int {
+			m := new(big.Int).Mul(a, b)
+			return new(big.Int).Mod(m, fq.Q)
+		}*/
+
+	t0 := g1.F.Mul(z2, z2z2) //t0 = Z2*Z2Z2			t0 = Z2^3
+	s1 := g1.F.Mul(y1, t0)   //S1 = Y1*t0				S1 = Y1*Z2^3
+
+	t1 := g1.F.Mul(z1, z1z1) //t1 = Z1*Z1Z1			t1 = Z1^3
+	s2 := g1.F.Mul(y2, t1)   //S2 = Y2*t1				S2 = Y2*Z1^3
+
+	h := g1.F.Sub(u2, u1)  //H = U2-U1					H = X2*Z1^2-X1*Z2^2
+	t2 := g1.F.Add(h, h)   //t2 = H+H = H*2			t2 = 2*(X2*Z1^2-X1*Z2^2)
+	i := g1.F.Square(t2)   //I = t2^2					I = 4*(X2*Z1^2-X1*Z2^2)^2
+	j := g1.F.Mul(h, i)    //J = H*I					J = 4*(X2*Z1^2-X1*Z2^2)^3
+	t3 := g1.F.Sub(s2, s1) //t3 = S2-S1				t3 = Y2*Z1^3-Y1*Z2^3
+	r := g1.F.Add(t3, t3)  //r = 2*t3					r = 2*(Y2*Z1^3-Y1*Z2^3)
+	v := g1.F.Mul(u1, i)   //V = U1*I					V = X1*Z2^2*4*(X2*Z1^2-X1*Z2^2)^2
+	t4 := g1.F.Square(r)   //t4 = r^2					t4 = 4*(Y2*Z1^3-Y1*Z2^3)^2
+	t5 := g1.F.Add(v, v)   //t5 = 2*V
+	t6 := g1.F.Sub(t4, j)  //t6 = t4-J
+	x3 := g1.F.Sub(t6, t5) //X3 = t6-t5
+	t7 := g1.F.Sub(v, x3)  //t7 = V-X3
+	t8 := g1.F.Mul(s1, j)  //t8 = S1*J
+	t9 := g1.F.Add(t8, t8) //t9 = 2*t8
+	t10 := g1.F.Mul(r, t7) //t10 = r*t7
+
+	y3 := g1.F.Sub(t10, t9) //Y3 = t10-t9
+
+	t11 := g1.F.Add(z1, z2)    //t11 = Z1+Z2
+	t12 := g1.F.Square(t11)    //t12 = t11^2
+	t13 := g1.F.Sub(t12, z1z1) //t13 = t12-Z1Z1
+	t14 := g1.F.Sub(t13, z2z2) //t14 = t13-Z2Z2
+	z3 := g1.F.Mul(t14, h)     //Z3 = t14*H
+
+	return [3]*big.Int{x3, y3, z3}
+}
+
+func (g1 G1) Neg(p [3]*big.Int) [3]*big.Int {
+	return [3]*big.Int{
+		p[0],
+		g1.F.Neg(p[1]), //p[1]의 덧셈의 역원을 구함, 주로 y1으로 사용되므로, -y1
+		p[2],
+	}
+}
+func (g1 G1) Sub(a, b [3]*big.Int) [3]*big.Int {
+	return g1.Add(a, g1.Neg(b)) //즉 p[1]만 덧셈의 역원으로 하여 Add 함수 
+}
+func (g1 G1) Double(p [3]*big.Int) [3]*big.Int { //point Doubling (4M + 6S or 4M + 4S)
+
+	// https://en.wikibooks.org/wiki/Cryptography/Prime_Curve/Jacobian_Coordinates
+	// http://hyperelliptic.org/EFD/g1p/auto-code/shortw/jacobian-0/doubling/dbl-2009-l.op3
+	// https://github.com/zcash/zcash/blob/master/src/snark/libsnark/algebra/curves/alt_bn128/alt_bn128_g1.cpp#L325
+
+	if g1.IsZero(p) {
+		return p
+	}
+
+	a := g1.F.Square(p[0]) //A = X1^2
+	b := g1.F.Square(p[1]) //B = Y1^2
+	c := g1.F.Square(b)    //C = B^2
+
+	t0 := g1.F.Add(p[0], b) //t0 = X1+B
+	t1 := g1.F.Square(t0)   //t1 = t0^2
+	t2 := g1.F.Sub(t1, a)   //t2 = t1-A
+	t3 := g1.F.Sub(t2, c)   //t3 = t2-C
+
+	d := g1.F.Double(t3)             //D = 2*t3
+	e := g1.F.Add(g1.F.Add(a, a), a) //E = 3*A
+	f := g1.F.Square(e)              //F = E^2
+
+	t4 := g1.F.Double(d)  //t4 = 2*D
+	x3 := g1.F.Sub(f, t4) //X3 = F-t4
+
+	t5 := g1.F.Sub(d, x3)         //t5 = D-X3
+	twoC := g1.F.Add(c, c)        //2*C
+	fourC := g1.F.Add(twoC, twoC) //4*C
+	t6 := g1.F.Add(fourC, fourC)  //t6 = 8*C
+	t7 := g1.F.Mul(e, t5)         //t7 = E*t5
+	y3 := g1.F.Sub(t7, t6)        //Y3 = t7-t6
+
+	t8 := g1.F.Mul(p[1], p[2]) //t8 = Y1*Z1
+	z3 := g1.F.Double(t8)      //Z3 = 2*t8
+
+	return [3]*big.Int{x3, y3, z3}
+}
+
+func (g1 G1) MulScalar(p [3]*big.Int, e *big.Int) [3]*big.Int { //스칼라 곱? e 값을 통해 점 p를 배 연산 또는 덧셈 연산을 진행
+	// https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add
+	// for more possible implementations see g2.go file, at the function g2.MulScalar()
+
+	q := [3]*big.Int{g1.F.Zero(), g1.F.Zero(), g1.F.Zero()} //{0,0,0}
+	d := g1.F.Copy(e)                                       // 복사
+	/*
+		func (fq Fq) Copy(a *big.Int) *big.Int {
+			return new(big.Int).SetBytes(a.Bytes())
+		}*/
+	r := p                                 //점 p
+	for i := d.BitLen() - 1; i >= 0; i-- { //d의 절대값의 비트 길이 d가 표현되는 비트의 길이 만큼 반복
+		q = g1.Double(q)   //배 연산
+		if d.Bit(i) == 1 { //해당 비트가 만약 1이면
+			q = g1.Add(q, r) //점p와 점q를 더함
+		}
+	}
+
+	return q
+}
+
+func (g1 G1) Affine(p [3]*big.Int) [2]*big.Int { //아핀 공간, 아핀 평명내의 점으로 변환함
+	if g1.IsZero(p) { //z축 좌표가 0일때
+		return g1.Zero() //(0,0) 반환
+	}
+
+	zinv := g1.F.Inverse(p[2]) //곱셈의 역원을 구함
+	zinv2 := g1.F.Square(zinv) //zinv^2
+	x := g1.F.Mul(p[0], zinv2) //y=x1*zinv^2
+
+	zinv3 := g1.F.Mul(zinv2, zinv) //zinv^3
+	y := g1.F.Mul(p[1], zinv3)     //y=y1*zinv^3
+
+	return [2]*big.Int{x, y} //(x,y) 반환
+}
+
+func (g1 G1) Equal(p1, p2 [3]*big.Int) bool { //두 점이
+	if g1.IsZero(p1) { //점1의 z축의 값이 0이면
+		return g1.IsZero(p2) //점2의 z값이 0인지 반환
+	}
+	if g1.IsZero(p2) { //점2의 z값이 0이면
+		return g1.IsZero(p1) //점1의 z값이 0인지 반환
+	}
+
+	z1z1 := g1.F.Square(p1[2]) //Z1^2
+	z2z2 := g1.F.Square(p2[2]) //Z2^2
+
+	u1 := g1.F.Mul(p1[0], z2z2) //U1=X1*Z2^2
+	u2 := g1.F.Mul(p2[0], z1z1) //U2=X2*Z1^2
+
+	z1cub := g1.F.Mul(p1[2], z1z1) //Z1^3
+	z2cub := g1.F.Mul(p2[2], z2z2) //Z2^3
+
+	s1 := g1.F.Mul(p1[1], z2cub) //S1=Y1*Z2^3
+	s2 := g1.F.Mul(p2[1], z1cub) //S2=Y2*Z1^3
+
+	return g1.F.Equal(u1, u2) && g1.F.Equal(s1, s2) //U1과 U2, S1과 S2가 모두 같은지 확인
+}
+```
+{% endtab %}
+{% endtabs %}
 
 ## G1 구조체 
 
