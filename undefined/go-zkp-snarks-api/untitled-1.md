@@ -4,7 +4,7 @@ description: >-
   구조체라고 생각됨
 ---
 
-# bn128/g1.go 분석
+# bn128/g1.go Analysis
 
 ## 포함 패키지 
 
