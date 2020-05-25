@@ -4,7 +4,7 @@ description: Groth16/groth16.go는 zk-SNARK 중 groth16의 제안방식을 적�
 
 # Groth16/groth16.go
 
-### groth16.go
+## source code
 
 {% tabs %}
 {% tab title="groth16.go" %}
@@ -647,4 +647,55 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 ```
 {% endtab %}
 {% endtabs %}
+
+## PK 
+
+> BACDelta 구조체는 
+>
+> Z 구조체는 
+>
+> G1 구조체는
+>
+> 결과적으로 PK은 검증키 알고리을 구현하고있다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
+
+```go
+type Pk struct { // Proving Key
+	BACDelta [][3]*big.Int // l+1 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / δ } 
+	Z        []*big.Int
+	G1       struct {
+		Alpha    [3]*big.Int
+		Beta     [3]*big.Int
+		Delta    [3]*big.Int
+		At       [][3]*big.Int // 0 에서 m 까지 {a(τ)} 
+		BACGamma [][3]*big.Int // 0 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / γ } 
+	}
+	G2 struct {
+		Beta     [3][2]*big.Int
+		Gamma    [3][2]*big.Int
+		Delta    [3][2]*big.Int
+		BACGamma [][3][2]*big.Int // 0 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / γ } 
+	}
+	PowersTauDelta [][3]*big.Int // G1 곡선으로 암호화 된 τ의 powers를 δ로 나눈 값
+}
+```
+
+## VK 
+
+> G2 구조체는
+>
+> 결과적으로 VK는 검증키 알고리즘을 구현하고 있다.
+
+```go
+type Vk struct { // Verificaion Key
+	IC [][3]*big.Int
+	G1 struct {
+		Alpha [3]*big.Int
+	}
+	G2 struct {
+		Beta  [3][2]*big.Int
+		Gamma [3][2]*big.Int
+		Delta [3][2]*big.Int
+	}
+}
+```
 
