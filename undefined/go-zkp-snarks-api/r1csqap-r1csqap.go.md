@@ -263,7 +263,7 @@ func Transpose(matrix [][]*big.Int) [][]*big.Int {
 }
 ```
 
-```text
+```go
 // ArrayOfBigZeros 함는 n 개의 요소가 0 인 *big.Int 배열을 생성
 func ArrayOfBigZeros(num int) []*big.Int {
 	bigZero := big.NewInt(int64(0))
@@ -275,7 +275,7 @@ func ArrayOfBigZeros(num int) []*big.Int {
 }
 ```
 
-```text
+```go
 // BigArraysEqual 함수는 2 개의 *big.Int 배열 길이 비교 후 같을 경우 값이 일치한지 비
 func BigArraysEqual(a, b []*big.Int) bool {
 	if len(a) != len(b) {
@@ -290,7 +290,7 @@ func BigArraysEqual(a, b []*big.Int) bool {
 }
 ```
 
-```text
+```go
 // NewPolynomialField 함수는 주어진 유한체로 새로운 다항식 필드를 생성
 func NewPolynomialField(f fields.Fq) PolynomialField {
 	return PolynomialField{
@@ -299,7 +299,7 @@ func NewPolynomialField(f fields.Fq) PolynomialField {
 }
 ```
 
-```text
+```go
 // Mul 함수는 유한체에서 두 개의 다항식을 곱셈 연산
 func (pf PolynomialField) Mul(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(len(a) + len(b) - 1)

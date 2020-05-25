@@ -555,7 +555,7 @@ func GenerateTrustedSetup(witnessLength int, circuit circuitcompiler.Circuit, al
 }
 ```
 
-```text
+```go
 // GenerateProofs 함수는 Circuit, Setup 및 Witness에서 zkSNARK를 증명하기 위해 모든 매개 변수를 생성
 func GenerateProofs(circuit circuitcompiler.Circuit, pk Pk, w []*big.Int, px []*big.Int) (Proof, error) {
 	var proof Proof
@@ -613,7 +613,7 @@ func GenerateProofs(circuit circuitcompiler.Circuit, pk Pk, w []*big.Int, px []*
 }
 ```
 
-```text
+```go
 // VerifyProof 함수는 BN128을 통해 증명의 페어링을 확인
 func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool {
 
