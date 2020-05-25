@@ -1,5 +1,5 @@
 ---
-description: Groth16/groth16.go는
+description: Groth16/groth16.go는 zk-SNARK 중 groth16의 제안방식을 적용한 논문의 코드
 ---
 
 # Groth16/groth16.go
