@@ -1,6 +1,10 @@
+---
+description: f1csqap/r1csqap.go는 r1cs 단계에서 생성된 값들을 qap 값으로 변환시키는 작업
+---
+
 # r1csqap/r1csqap.go
 
-### r1csqap.go
+## source code
 
 {% tabs %}
 {% tab title="r1csqap.go" %}
@@ -231,7 +235,7 @@ package r1csqap
 
 import (
 	"bytes"
-	"math/big"
+	"math/big" //큰수 계산(또는 부동 소수 점수, 유리수의 정밀도 산수)을 위한 패키지
 
 	"github.com/arnaucube/go-snark/fields"
 )
@@ -242,7 +246,7 @@ import (
 ```go
 // 다항식 필드는 다항식 연산이 수행되는 유한 위의 다항식
 type PolynomialField struct {
-	F fields.Fq
+	F fields.Fq //go-snark/fields/Fq 구조체1
 }
 ```
 {% endtab %}
@@ -314,7 +318,7 @@ func (pf PolynomialField) Mul(a, b []*big.Int) []*big.Int {
 }
 ```
 
-```text
+```go
 // Div 함수는 유한체에서 두 개의 다항식을 나누고 결과와 나머지를 반환
 func (pf PolynomialField) Div(a, b []*big.Int) ([]*big.Int, []*big.Int) {
 	// https://en.wikipedia.org/wiki/Division_algorithm
@@ -485,4 +489,28 @@ func (pf PolynomialField) DivisorPolynomial(px, z []*big.Int) []*big.Int {
 ```
 {% endtab %}
 {% endtabs %}
+
+## PolynomialField  
+
+> fields.Fq 구조체는 유한체\(mod Q상의\)를 구현한 구조체 패키지이다. 때문에 해당 패키지의 모든 연산은 mod Q 상에서 이루어진다. [https://github.com/arnaucube/go-snark/blob/master/fields/fq.go](https://github.com/arnaucube/go-snark/blob/master/fields/fq.go)
+
+```go
+// 다항식 필드는 다항식 연산이 수행되는 유한 위의 다항식
+type PolynomialField struct {
+	F fields.Fq //go-snark/fields/Fq 구조체1
+}
+```
+
+### PolynomialField 구조체 내 메소드
+
+* Mul\(a, b \[\]_big.Int\) \[\]_big.Int 
+* Div\(a, b \[\]_big.Int\) \(\[\]_big.Int, \[\]_big.Int\)_ 
+* _Add\(a, b \[\]_big.Int\) \[\]_big.Int_ 
+* _Sub\(a, b \[\]_big.Int\) \[\]_big.Int_ 
+* _Eval\(v \[\]_big.Int, x _big.Int\)_ big.Int 
+* NewPolZeroAt\(pointPos, totalPoints int, height _big.Int\) \[\]_big.Int
+*  LagrangeInterpolation\(v \[\]_big.Int\) \[\]_big.Int 
+* R1CSToQAP\(a, b, c \[\]\[\]_big.Int\) \(\[\]\[\]_big.Int, \[\]\[\]_big.Int, \[\]\[\]_big.Int, \[\]_big.Int\)_ 
+* _CombinePolynomials\(r \[\]_big.Int, ap, bp, cp \[\]\[\]_big.Int\) \(\[\]_big.Int, \[\]_big.Int, \[\]_big.Int, \[\]_big.Int\)_
+* _DivisorPolynomial\(px, z \[\]_big.Int\) \[\]\*big.Int
 
