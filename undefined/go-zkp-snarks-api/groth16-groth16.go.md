@@ -650,11 +650,11 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 
 ## PK 
 
-> BACDelta 구조체는 
+> BACDelta 구조체는 l+1 에서 m 까지 {\( βui\(x\)+αvi\(x\)+wi\(x\) \) / δ }의 연산을 처리한다.
 >
-> Z 구조체는 
+> Z 구조체는 z의 등식을 연산 처리한다.
 >
-> G1 구조체는
+> G1 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
 >
 > 결과적으로 PK은 검증키 알고리을 구현하고있다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
 
@@ -698,4 +698,6 @@ type Vk struct { // Verificaion Key
 	}
 }
 ```
+
+### 
 
