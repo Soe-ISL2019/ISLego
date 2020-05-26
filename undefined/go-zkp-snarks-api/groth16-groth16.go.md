@@ -656,6 +656,10 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 >
 > G1 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
 >
+> G2 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
+>
+> PwersTauDelta 배열 변수는 G1 곡선으로 암호화된 τ의 제곱 δ로 나눈 값을 저장한다.
+>
 > 결과적으로 PK은 검증키 알고리을 구현하고있다. [https://en.wikipedia.org/wiki/Elliptic\_curve\_point\_multiplication](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Double-and-add)
 
 ```go
@@ -675,7 +679,7 @@ type Pk struct { // Proving Key
 		Delta    [3][2]*big.Int
 		BACGamma [][3][2]*big.Int // 0 에서 m 까지 {( βui(x)+αvi(x)+wi(x) ) / γ } 
 	}
-	PowersTauDelta [][3]*big.Int // G1 곡선으로 암호화 된 τ의 powers를 δ로 나눈 값
+	PowersTauDelta [][3]*big.Int // G1 곡선으로 암호화된 τ의 제곱 δ로 나눈 값
 }
 ```
 
@@ -683,9 +687,9 @@ type Pk struct { // Proving Key
 
 > IC 배열 변수
 >
-> G1 구조체는
+> G1 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
 >
-> G2 구조체는
+> G2 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
 >
 > 결과적으로 VK는 검증키 알고리즘을 구현하고 있다.
 
