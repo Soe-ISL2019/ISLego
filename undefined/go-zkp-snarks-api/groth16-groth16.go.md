@@ -650,9 +650,9 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 
 ## PK 
 
-> BACDelta 구조체는 l+1 에서 m 까지 {\( βui\(x\)+αvi\(x\)+wi\(x\) \) / δ }의 연산을 처리한다.
+> BACDelta 배열 변는 l+1 에서 m 까지 {\( βui\(x\)+αvi\(x\)+wi\(x\) \) / δ }의 연산을 처리한다.
 >
-> Z 구조체는 z의 등식을 연산 처리한다.
+> Z 배열 변는 z의 등식을 연산 처리한다.
 >
 > G1 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
 >
@@ -681,6 +681,10 @@ type Pk struct { // Proving Key
 
 ## VK 
 
+> IC 배열 변수
+>
+> G1 구조체는
+>
 > G2 구조체는
 >
 > 결과적으로 VK는 검증키 알고리즘을 구현하고 있다.
