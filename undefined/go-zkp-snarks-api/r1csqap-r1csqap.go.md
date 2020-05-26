@@ -1,5 +1,5 @@
 ---
-description: f1csqap/r1csqap.go는 r1cs 단계에서 생성된 값들을 qap 값으로 변환시키는 작업
+description: f1csqap/r1csqap.go는 r1cs 단계에서 생성된 값들을 qap 값으로 변환시키는 코드
 ---
 
 # r1csqap/r1csqap.go
@@ -337,7 +337,7 @@ func (pf PolynomialField) Div(a, b []*big.Int) ([]*big.Int, []*big.Int) {
 }
 ```
 
-```text
+```go
 // max 함수는 정수형 a, b 인자를 비교하여 큰 값을 반환
 func max(a, b int) int {
 	if a > b {
@@ -347,7 +347,7 @@ func max(a, b int) int {
 }
 ```
 
-```text
+```go
 // Add 함수는 유한체 위에 두 개의 다항식을 덧셈 연산
 func (pf PolynomialField) Add(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(max(len(a), len(b)))
@@ -361,7 +361,7 @@ func (pf PolynomialField) Add(a, b []*big.Int) []*big.Int {
 }
 ```
 
-```text
+```go
 // Sub 유한체에서 두 개의 다항식을 뺄셈 연산 
 func (pf PolynomialField) Sub(a, b []*big.Int) []*big.Int {
 	r := ArrayOfBigZeros(max(len(a), len(b)))
@@ -375,7 +375,7 @@ func (pf PolynomialField) Sub(a, b []*big.Int) []*big.Int {
 }
 ```
 
-```text
+```go
 // Eval 주어진 값 x에서 유한체에서의 다항식을 평가
 func (pf PolynomialField) Eval(v []*big.Int, x *big.Int) *big.Int {
 	r := big.NewInt(int64(0))
@@ -388,7 +388,7 @@ func (pf PolynomialField) Eval(v []*big.Int, x *big.Int) *big.Int {
 }
 ```
 
-```text
+```go
 // NewPolZeroAt 함수는 주어진 값에서 값이 0 인 새로운 다항식을 생성
 func (pf PolynomialField) NewPolZeroAt(pointPos, totalPoints int, height *big.Int) []*big.Int {
 	fac := 1
@@ -411,7 +411,7 @@ func (pf PolynomialField) NewPolZeroAt(pointPos, totalPoints int, height *big.In
 }
 ```
 
-```text
+```go
 // LagrangeInterpolation 함수는 라그랑주 보간법/ 라그랑주 다항식 연산을 수행
 func (pf PolynomialField) LagrangeInterpolation(v []*big.Int) []*big.Int {
 	// https://en.wikipedia.org/wiki/Lagrange_polynomial
@@ -424,7 +424,7 @@ func (pf PolynomialField) LagrangeInterpolation(v []*big.Int) []*big.Int {
 }
 ```
 
-```text
+```go
 // R1CSToQAP 함수는 R1CS 값을 QAP 값으로 변환
 func (pf PolynomialField) R1CSToQAP(a, b, c [][]*big.Int) ([][]*big.Int, [][]*big.Int, [][]*big.Int, []*big.Int) {
 	aT := Transpose(a)
@@ -456,7 +456,7 @@ func (pf PolynomialField) R1CSToQAP(a, b, c [][]*big.Int) ([][]*big.Int, [][]*bi
 }
 ```
 
-```text
+```go
 // CombinePolynomials 함수는 주어진 다항식 배열을 하나로 결합하고, P(x)를 반환
 func (pf PolynomialField) CombinePolynomials(r []*big.Int, ap, bp, cp [][]*big.Int) ([]*big.Int, []*big.Int, []*big.Int, []*big.Int) {
 	var ax []*big.Int
@@ -480,7 +480,7 @@ func (pf PolynomialField) CombinePolynomials(r []*big.Int, ap, bp, cp [][]*big.I
 }
 ```
 
-```text
+```go
 // DivisorPolynomial 함수는 2 개의 다항식이 주어지면 나눗셈(제수) 다항식을 반환
 func (pf PolynomialField) DivisorPolynomial(px, z []*big.Int) []*big.Int {
 	quo, _ := pf.Div(px, z)
