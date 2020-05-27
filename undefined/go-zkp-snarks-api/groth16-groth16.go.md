@@ -369,7 +369,7 @@ type Vk struct { // Verificaion Key
 }
 ```
 
-```text
+```go
 // Setup 구조체는 신뢰할 수있는 설정 데이터를 보유하는 데이터 구조 
 // GenerateTrustedSetup 함수가 완료된 후 Setup.Toxic 하위 구조체를 삭제해야 함 
 type Setup struct {
@@ -648,7 +648,7 @@ func VerifyProof(vk Vk, proof Proof, publicSignals []*big.Int, debug bool) bool 
 {% endtab %}
 {% endtabs %}
 
-## PK 
+## PK 구조
 
 > BACDelta 배열 변는 l+1 에서 m 까지 {\( βui\(x\)+αvi\(x\)+wi\(x\) \) / δ }의 연산을 처리한다.
 >
@@ -683,7 +683,7 @@ type Pk struct { // Proving Key
 }
 ```
 
-## VK 
+## VK 구조
 
 > IC 배열 변수
 >
@@ -691,7 +691,7 @@ type Pk struct { // Proving Key
 >
 > G2 구조체는 타원곡선의 연산을 위한 객체로, Jacobian Coordinates에서 타원곡선의 연산을 하는 구조체이다.
 >
-> 결과적으로 VK는 검증키 알고리즘을 구현하고 있다.
+> 결과적으로 VK는 검증키 알고리즘을 구현
 
 ```go
 type Vk struct { // Verificaion Key
@@ -707,5 +707,9 @@ type Vk struct { // Verificaion Key
 }
 ```
 
-### 
+## Setup 구조
+
+## Proof 구조
+
+## utils 구조
 

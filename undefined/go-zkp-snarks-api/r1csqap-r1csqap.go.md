@@ -1,5 +1,5 @@
 ---
-description: f1csqap/r1csqap.go는 r1cs 단계에서 생성된 값들을 qap 값으로 변환시키는 코드
+description: r1csqap/r1csqap.go는 r1cs 단계에서 생성된 값들을 qap 값으로 변환시키는 코드
 ---
 
 # r1csqap/r1csqap.go
